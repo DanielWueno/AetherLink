@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+    <AssemblyName>AetherLink.Core</AssemblyName>
+    <RootNamespace>AetherLink.Core</RootNamespace>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- SharpAdbClient: librería managed de ADB — evita shell crudo y parseo frágil -->
+    <PackageReference Include="SharpAdbClient" Version="2.3.23" />
+    <!-- Logging abstractions — sin binding a implementación concreta en esta capa -->
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
+  </ItemGroup>
+
+</Project>

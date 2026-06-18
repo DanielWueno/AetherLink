@@ -1,0 +1,51 @@
+# ─── .NET / MSBuild ────────────────────────────────────────────────────────
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+_ReSharper*/
+*.resharper
+*.DotSettings.user
+
+# ─── MAUI / Xamarin ─────────────────────────────────────────────────────────
+*.apk
+*.aab
+*.ipa
+*.app
+*.dSYM/
+*.xcarchive/
+platforms/
+.gradle/
+local.properties
+google-services.json
+GoogleService-Info.plist
+
+# ─── NuGet ──────────────────────────────────────────────────────────────────
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+nuget.dgspec.json
+
+# ─── Publish output ─────────────────────────────────────────────────────────
+publish/
+PublishProfiles/
+
+# ─── OS generated ───────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── IDE ────────────────────────────────────────────────────────────────────
+.idea/
+*.swp
+*~
+
+# ─── Logs ───────────────────────────────────────────────────────────────────
+*.log
+*.trace
