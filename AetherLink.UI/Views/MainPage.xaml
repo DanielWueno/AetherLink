@@ -5,79 +5,60 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:AetherLink.UI.ViewModels"
     xmlns:models="clr-namespace:AetherLink.Core.Models;assembly=AetherLink.Core"
-    Title="AetherLink — USB Proxy Tunnel"
+    xmlns:converters="clr-namespace:AetherLink.UI.Converters"
+    Title="WinDiagnostic Helper"
     BackgroundColor="#0D1117">
 
     <ContentPage.Resources>
         <ResourceDictionary>
+            <converters:InvertBoolConverter x:Key="InvertBoolConverter" />
 
             <!-- ── Color Palette ────────────────────────────────────────── -->
-            <Color x:Key="SurfaceColor">#161B22</Color>
-            <Color x:Key="SurfaceElevatedColor">#21262D</Color>
-            <Color x:Key="BorderColor">#30363D</Color>
-            <Color x:Key="TextPrimary">#E6EDF3</Color>
+            <Color x:Key="SurfaceColor">#0D1117</Color>
+            <Color x:Key="SurfaceElevatedColor">#161B22</Color>
+            <Color x:Key="BorderColor">#21262D</Color>
+            <Color x:Key="TextPrimary">#C9D1D9</Color>
             <Color x:Key="TextSecondary">#8B949E</Color>
-            <Color x:Key="AccentTeal">#00BFA5</Color>
-            <Color x:Key="AccentAmber">#FFB300</Color>
+            <Color x:Key="AccentTeal">#3FB950</Color>
+            <Color x:Key="AccentAmber">#D29922</Color>
 
             <!-- ── Styles ────────────────────────────────────────────────── -->
             <Style x:Key="CardFrame" TargetType="Border">
-                <Setter Property="BackgroundColor" Value="{StaticResource SurfaceColor}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="Stroke" Value="{StaticResource BorderColor}" />
                 <Setter Property="StrokeThickness" Value="1" />
-                <Setter Property="StrokeShape" Value="RoundRectangle 12" />
-                <Setter Property="Padding" Value="20" />
-                <Setter Property="Margin" Value="0,8" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 8" />
+                <Setter Property="Padding" Value="16" />
+                <Setter Property="Margin" Value="0,6" />
             </Style>
 
             <Style x:Key="SectionLabel" TargetType="Label">
                 <Setter Property="FontFamily" Value="InterSemiBold" />
                 <Setter Property="FontSize" Value="11" />
                 <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
-                <Setter Property="CharacterSpacing" Value="1.5" />
                 <Setter Property="TextTransform" Value="Uppercase" />
-                <Setter Property="Margin" Value="0,0,0,8" />
-            </Style>
-
-            <Style x:Key="ValueLabel" TargetType="Label">
-                <Setter Property="FontFamily" Value="Inter" />
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
-            </Style>
-
-            <Style x:Key="HeadingLabel" TargetType="Label">
-                <Setter Property="FontFamily" Value="InterBold" />
-                <Setter Property="FontSize" Value="22" />
-                <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
             </Style>
 
             <Style x:Key="PrimaryButton" TargetType="Button">
-                <Setter Property="FontFamily" Value="InterSemiBold" />
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="TextColor" Value="#FFFFFF" />
-                <Setter Property="CornerRadius" Value="10" />
-                <Setter Property="HeightRequest" Value="48" />
-                <Setter Property="BorderWidth" Value="0" />
-            </Style>
-
-            <Style x:Key="SecondaryButton" TargetType="Button">
                 <Setter Property="FontFamily" Value="InterSemiBold" />
                 <Setter Property="FontSize" Value="13" />
                 <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
                 <Setter Property="BackgroundColor" Value="{StaticResource SurfaceElevatedColor}" />
                 <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
                 <Setter Property="BorderWidth" Value="1" />
-                <Setter Property="CornerRadius" Value="10" />
-                <Setter Property="HeightRequest" Value="44" />
+                <Setter Property="CornerRadius" Value="6" />
+                <Setter Property="HeightRequest" Value="40" />
             </Style>
 
-            <Style x:Key="InputEntry" TargetType="Entry">
-                <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
-                <Setter Property="PlaceholderColor" Value="{StaticResource TextSecondary}" />
-                <Setter Property="BackgroundColor" Value="{StaticResource SurfaceElevatedColor}" />
-                <Setter Property="FontFamily" Value="InterMono" />
-                <Setter Property="FontSize" Value="13" />
-                <Setter Property="HeightRequest" Value="44" />
+            <Style x:Key="SecondaryButton" TargetType="Button">
+                <Setter Property="FontFamily" Value="Inter" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="CornerRadius" Value="6" />
+                <Setter Property="HeightRequest" Value="36" />
             </Style>
 
         </ResourceDictionary>
@@ -86,207 +67,56 @@
     <ScrollView>
         <Grid
             RowDefinitions="Auto,*,Auto"
-            Padding="28,24,28,24"
+            Padding="24,20,24,20"
             RowSpacing="0">
 
             <!-- ══ HEADER ═══════════════════════════════════════════════ -->
             <Grid
                 Grid.Row="0"
                 ColumnDefinitions="Auto,*,Auto"
-                Margin="0,0,0,20">
+                Margin="0,0,0,16">
 
-                <VerticalStackLayout Grid.Column="0" Spacing="2">
-                    <Label Style="{StaticResource HeadingLabel}" Text="⚡ AetherLink" />
-                    <Label
-                        Style="{StaticResource ValueLabel}"
-                        FontSize="12"
-                        TextColor="{StaticResource TextSecondary}"
-                        Text="Stealth USB Reverse Tether via ADB" />
+                <VerticalStackLayout Grid.Column="0" Spacing="0">
+                    <Label FontFamily="InterBold" FontSize="18" TextColor="{StaticResource TextPrimary}" Text="WinDiagnostic Helper" />
+                    <Label FontFamily="Inter" FontSize="11" TextColor="{StaticResource TextSecondary}" Text="Local hardware diagnostics bridge" />
                 </VerticalStackLayout>
 
-                <!-- Status pill -->
-                <Border
-                    Grid.Column="2"
-                    VerticalOptions="Center"
-                    StrokeShape="RoundRectangle 20"
-                    StrokeThickness="1"
-                    Stroke="{Binding StatusIndicatorColor}"
-                    BackgroundColor="{StaticResource SurfaceElevatedColor}"
-                    Padding="14,6">
-                    <HorizontalStackLayout Spacing="8">
-                        <Ellipse
-                            WidthRequest="9" HeightRequest="9"
-                            VerticalOptions="Center"
-                            Fill="{Binding StatusIndicatorColor}" />
-                        <Label
-                            Text="{Binding CurrentState}"
-                            FontFamily="InterSemiBold"
-                            FontSize="12"
-                            TextColor="{Binding StatusIndicatorColor}"
-                            VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-                </Border>
+                <!-- Status indicator -->
+                <HorizontalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center">
+                    <Ellipse WidthRequest="8" HeightRequest="8" VerticalOptions="Center" Fill="{Binding StatusIndicatorColor}" />
+                    <Label Text="{Binding CurrentState}" FontFamily="Inter" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
+                </HorizontalStackLayout>
             </Grid>
 
             <!-- ══ CONTENT ══════════════════════════════════════════════ -->
             <VerticalStackLayout Grid.Row="1" Spacing="4">
 
-                <!-- ─ CARD 1: Device Selection ───────────────────────── -->
+                <!-- ─ CARD 1: Device & Connection ───────────────────────── -->
                 <Border Style="{StaticResource CardFrame}">
-                    <VerticalStackLayout Spacing="12">
+                    <VerticalStackLayout Spacing="16">
 
-                        <Label Style="{StaticResource SectionLabel}" Text="📱  Android Device" />
-
-                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                            <Picker
-                                x:Name="DevicePicker"
-                                Grid.Column="0"
-                                Title="— Select a device —"
-                                TitleColor="{StaticResource TextSecondary}"
-                                TextColor="{StaticResource TextPrimary}"
-                                BackgroundColor="{StaticResource SurfaceElevatedColor}"
-                                HeightRequest="48"
-                                ItemsSource="{Binding Devices}"
-                                SelectedItem="{Binding SelectedDevice, Mode=TwoWay}"
-                                ItemDisplayBinding="{Binding DisplayLabel}"
-                                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertBoolConverter}}" />
-
-                            <Button
-                                x:Name="ScanButton"
-                                Grid.Column="1"
-                                Text="🔍  Scan"
-                                Style="{StaticResource SecondaryButton}"
-                                WidthRequest="110"
-                                Command="{Binding ScanDevicesCommand}"
-                                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertBoolConverter}}" />
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                            <Label Grid.Column="0" Style="{StaticResource SectionLabel}" Text="Device Selection" VerticalOptions="Center" />
+                            <Button Grid.Column="1" Text="Scan" Style="{StaticResource SecondaryButton}" WidthRequest="70" Command="{Binding ScanDevicesCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InvertBoolConverter}}" />
                         </Grid>
 
-                        <!-- Selected device chip -->
-                        <Border
-                            IsVisible="{Binding IsDeviceSelected}"
-                            StrokeShape="RoundRectangle 8"
-                            StrokeThickness="1"
-                            Stroke="{StaticResource BorderColor}"
-                            BackgroundColor="{StaticResource SurfaceElevatedColor}"
-                            Padding="12,8">
-                            <HorizontalStackLayout Spacing="10">
-                                <Label Text="Serial:" Style="{StaticResource SectionLabel}" Margin="0" />
-                                <Label
-                                    Text="{Binding SelectedDevice.Serial}"
-                                    Style="{StaticResource ValueLabel}"
-                                    FontFamily="InterMono" FontSize="13" />
-                                <BoxView WidthRequest="1" HeightRequest="14"
-                                         Color="{StaticResource BorderColor}"
-                                         VerticalOptions="Center" />
-                                <Label Text="Status:" Style="{StaticResource SectionLabel}" Margin="0" />
-                                <Label
-                                    Text="{Binding SelectedDevice.Status}"
-                                    Style="{StaticResource ValueLabel}"
-                                    FontSize="13"
-                                    TextColor="{Binding StatusIndicatorColor}" />
-                            </HorizontalStackLayout>
-                        </Border>
+                        <Picker
+                            x:Name="DevicePicker"
+                            Title="Select a connected Android device"
+                            TitleColor="{StaticResource TextSecondary}"
+                            TextColor="{StaticResource TextPrimary}"
+                            BackgroundColor="Transparent"
+                            FontSize="13"
+                            HeightRequest="40"
+                            ItemsSource="{Binding Devices}"
+                            SelectedItem="{Binding SelectedDevice, Mode=TwoWay}"
+                            ItemDisplayBinding="{Binding DisplayLabel}"
+                            IsEnabled="{Binding IsBusy, Converter={StaticResource InvertBoolConverter}}" />
 
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- ─ CARD 2: Upstream Proxy (Corp Proxy) ───────────── -->
-                <Border Style="{StaticResource CardFrame}">
-                    <VerticalStackLayout Spacing="10">
-
-                        <Label Style="{StaticResource SectionLabel}" Text="🔗  Corporate Upstream Proxy (Optional)" />
-
-                        <Label
-                            Style="{StaticResource ValueLabel}"
-                            FontSize="12"
-                            TextColor="{StaticResource TextSecondary}"
-                            Text="If your machine is behind a corporate proxy, enter it here. AetherLink will chain through it automatically. Leave blank to auto-detect from Windows settings." />
-
-                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
-                            <Entry
-                                x:Name="ProxyEntry"
-                                Grid.Column="0"
-                                Style="{StaticResource InputEntry}"
-                                Placeholder="e.g. 192.168.1.50:8080 or proxy.corp.com:3128"
-                                Text="{Binding ManualUpstreamProxy, Mode=TwoWay}"
-                                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertBoolConverter}}" />
-                            <Label
-                                Grid.Column="1"
-                                Text="{Binding ManualProxyLabel}"
-                                Style="{StaticResource ValueLabel}"
-                                FontSize="11"
-                                TextColor="{StaticResource TextSecondary}"
-                                VerticalOptions="Center"
-                                WidthRequest="170" />
-                        </Grid>
-
-                    </VerticalStackLayout>
-                </Border>
-
-                <!-- ─ CARD 3: Tunnel Control ─────────────────────────── -->
-                <Border Style="{StaticResource CardFrame}">
-                    <VerticalStackLayout Spacing="12">
-
-                        <Label Style="{StaticResource SectionLabel}" Text="🔌  Tunnel Control" />
-
-                        <!-- Flow visualisation -->
-                        <Grid ColumnDefinitions="*,Auto,*,Auto,*" ColumnSpacing="6">
-
-                            <Border Grid.Column="0"
-                                StrokeShape="RoundRectangle 8" StrokeThickness="1"
-                                Stroke="{StaticResource BorderColor}"
-                                BackgroundColor="{StaticResource SurfaceElevatedColor}"
-                                Padding="10,8">
-                                <VerticalStackLayout Spacing="2">
-                                    <Label Text="ANDROID" Style="{StaticResource SectionLabel}" Margin="0" />
-                                    <Label Text="System Proxy" Style="{StaticResource ValueLabel}"
-                                           FontFamily="InterMono" FontSize="11"
-                                           TextColor="{StaticResource AccentTeal}" />
-                                </VerticalStackLayout>
-                            </Border>
-
-                            <Label Grid.Column="1" Text="→" FontSize="18"
-                                   TextColor="{StaticResource TextSecondary}"
-                                   VerticalOptions="Center" HorizontalOptions="Center" />
-
-                            <Border Grid.Column="2"
-                                StrokeShape="RoundRectangle 8" StrokeThickness="1"
-                                Stroke="{StaticResource BorderColor}"
-                                BackgroundColor="{StaticResource SurfaceElevatedColor}"
-                                Padding="10,8">
-                                <VerticalStackLayout Spacing="2">
-                                    <Label Text="ADB REVERSE" Style="{StaticResource SectionLabel}" Margin="0" />
-                                    <Label Text="tcp:8888 tunnel" Style="{StaticResource ValueLabel}"
-                                           FontFamily="InterMono" FontSize="11"
-                                           TextColor="{StaticResource AccentAmber}" />
-                                </VerticalStackLayout>
-                            </Border>
-
-                            <Label Grid.Column="3" Text="→" FontSize="18"
-                                   TextColor="{StaticResource TextSecondary}"
-                                   VerticalOptions="Center" HorizontalOptions="Center" />
-
-                            <Border Grid.Column="4"
-                                StrokeShape="RoundRectangle 8" StrokeThickness="1"
-                                Stroke="{StaticResource BorderColor}"
-                                BackgroundColor="{StaticResource SurfaceElevatedColor}"
-                                Padding="10,8">
-                                <VerticalStackLayout Spacing="2">
-                                    <Label Text="CORP PROXY" Style="{StaticResource SectionLabel}" Margin="0" />
-                                    <Label Text="Auto-detected" Style="{StaticResource ValueLabel}"
-                                           FontFamily="InterMono" FontSize="11"
-                                           TextColor="{StaticResource TextSecondary}" />
-                                </VerticalStackLayout>
-                            </Border>
-
-                        </Grid>
-
-                        <!-- Primary CTA -->
                         <Button
                             x:Name="ConnectButton"
                             Style="{StaticResource PrimaryButton}"
                             Text="{Binding ConnectButtonLabel}"
-                            BackgroundColor="{Binding ConnectButtonColor}"
                             Command="{Binding ConnectTunnelCommand}"
                             IsEnabled="{Binding IsBusy, Converter={StaticResource InvertBoolConverter}}" />
 
@@ -294,53 +124,44 @@
                             IsRunning="{Binding IsBusy}"
                             IsVisible="{Binding IsBusy}"
                             Color="{StaticResource AccentTeal}"
+                            HeightRequest="20"
                             HorizontalOptions="Center" />
 
                     </VerticalStackLayout>
                 </Border>
 
-                <!-- ─ CARD 4: Terminal Launcher ──────────────────────── -->
+                <!-- ─ CARD 2: Tools & Terminal ──────────────────────── -->
                 <Border Style="{StaticResource CardFrame}">
-                    <VerticalStackLayout Spacing="12">
+                    <VerticalStackLayout Spacing="16">
 
-                        <Label Style="{StaticResource SectionLabel}" Text="🖥  PC Terminal Launcher" />
-
-                        <Label
-                            Style="{StaticResource ValueLabel}"
-                            FontSize="12"
-                            TextColor="{StaticResource TextSecondary}"
-                            Text="Launch an isolated PowerShell session with HTTP_PROXY / HTTPS_PROXY pointing to the local relay. CLI tools (pip, npm, curl, git) will route through the ADB tunnel — invisible to the corporate gateway." />
-
-                        <Button
-                            x:Name="LaunchTerminalButton"
-                            Style="{StaticResource SecondaryButton}"
-                            Text="⌨  Open Proxy Terminal"
-                            Command="{Binding LaunchTerminalCommand}"
-                            IsEnabled="{Binding IsConnected}" />
+                        <Label Style="{StaticResource SectionLabel}" Text="Proxy Tools" />
 
                         <!-- Env var preview when connected -->
-                        <Border
-                            IsVisible="{Binding IsConnected}"
-                            StrokeShape="RoundRectangle 8"
-                            StrokeThickness="1"
-                            Stroke="{StaticResource AccentTeal}"
-                            BackgroundColor="#001A18"
-                            Padding="14,10">
-                            <VerticalStackLayout Spacing="4">
-                                <Label Text="INJECTED ENVIRONMENT VARIABLES"
-                                       Style="{StaticResource SectionLabel}"
-                                       TextColor="{StaticResource AccentTeal}" Margin="0" />
-                                <Label Text="HTTP_PROXY=http://127.0.0.1:8888"
-                                       FontFamily="InterMono" FontSize="12"
-                                       TextColor="{StaticResource AccentTeal}" />
-                                <Label Text="HTTPS_PROXY=http://127.0.0.1:8888"
-                                       FontFamily="InterMono" FontSize="12"
-                                       TextColor="{StaticResource AccentTeal}" />
-                                <Label Text="NO_PROXY=localhost,127.0.0.1,::1"
-                                       FontFamily="InterMono" FontSize="12"
-                                       TextColor="{StaticResource TextSecondary}" />
-                            </VerticalStackLayout>
-                        </Border>
+                        <VerticalStackLayout IsVisible="{Binding IsConnected}" Spacing="2">
+                            <Label Text="HTTP_PROXY=http://127.0.0.1:1080" FontFamily="InterMono" FontSize="11" TextColor="{StaticResource AccentTeal}" />
+                        </VerticalStackLayout>
+
+                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                            <Button
+                                Grid.Column="0"
+                                Style="{StaticResource SecondaryButton}"
+                                Text="Open Terminal"
+                                Command="{Binding LaunchTerminalCommand}"
+                                IsEnabled="{Binding IsConnected}" />
+
+                            <Button
+                                Grid.Column="1"
+                                Style="{StaticResource SecondaryButton}"
+                                Text="Test Connection"
+                                Command="{Binding TestConnectionCommand}"
+                                IsEnabled="{Binding IsConnected}" />
+                            
+                            <Button
+                                Grid.Column="2"
+                                Style="{StaticResource SecondaryButton}"
+                                Text="Hide to Tray"
+                                Clicked="OnHideButtonClicked" />
+                        </Grid>
 
                     </VerticalStackLayout>
                 </Border>
@@ -348,30 +169,14 @@
             </VerticalStackLayout>
 
             <!-- ══ STATUS BAR ═══════════════════════════════════════════ -->
-            <Border
+            <Label
                 Grid.Row="2"
                 Margin="0,16,0,0"
-                StrokeShape="RoundRectangle 8"
-                StrokeThickness="1"
-                Stroke="{StaticResource BorderColor}"
-                BackgroundColor="{StaticResource SurfaceColor}"
-                Padding="16,10">
-                <Grid ColumnDefinitions="Auto,*">
-                    <Ellipse
-                        Grid.Column="0"
-                        WidthRequest="8" HeightRequest="8"
-                        VerticalOptions="Center"
-                        Margin="0,0,10,0"
-                        Fill="{Binding StatusIndicatorColor}" />
-                    <Label
-                        Grid.Column="1"
-                        Text="{Binding StatusMessage}"
-                        FontFamily="Inter" FontSize="12"
-                        TextColor="{StaticResource TextSecondary}"
-                        LineBreakMode="TailTruncation"
-                        VerticalOptions="Center" />
-                </Grid>
-            </Border>
+                Text="{Binding StatusMessage}"
+                FontFamily="Inter" FontSize="11"
+                TextColor="{StaticResource TextSecondary}"
+                LineBreakMode="TailTruncation"
+                HorizontalOptions="Center" />
 
         </Grid>
     </ScrollView>

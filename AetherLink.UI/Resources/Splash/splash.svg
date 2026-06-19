@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- AetherLink splash screen — centered lightning bolt on brand dark background -->
+  <rect width="128" height="128" fill="#0D1117"/>
+  <polygon points="78,20 47,70 66,70 52,108 95,52 72,52" fill="#00BFA5" opacity="0.95"/>
+</svg>

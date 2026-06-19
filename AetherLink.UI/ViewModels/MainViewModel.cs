@@ -22,7 +22,7 @@ public sealed partial class MainViewModel : ObservableObject
     private readonly ILogger<MainViewModel>   _logger;
 
     // ─── Configuration ────────────────────────────────────────────────────────
-    private const int    LocalProxyPort = 8888;
+    private const int    LocalProxyPort = 1080;
     private const string ProxyHost      = "127.0.0.1";
 
     // ─── Observable properties ────────────────────────────────────────────────
@@ -30,7 +30,7 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsDeviceSelected))]
     [NotifyCanExecuteChangedFor(nameof(ConnectTunnelCommand))]
-    private AndroidDevice? _selectedDevice;
+    public partial AndroidDevice? SelectedDevice { get; set; }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsBusy))]
@@ -41,14 +41,15 @@ public sealed partial class MainViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ScanDevicesCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConnectTunnelCommand))]
     [NotifyCanExecuteChangedFor(nameof(LaunchTerminalCommand))]
-    private TunnelState _currentState = TunnelState.Ready;
+    [NotifyCanExecuteChangedFor(nameof(TestConnectionCommand))]
+    public partial TunnelState CurrentState { get; set; } = TunnelState.Ready;
 
     [ObservableProperty]
-    private string _statusMessage = "Ready. Press Scan to detect connected Android devices.";
+    public partial string StatusMessage { get; set; } = "Ready. Press Scan to detect connected Android devices.";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ManualProxyLabel))]
-    private string _manualUpstreamProxy = string.Empty;
+    public partial string ManualUpstreamProxy { get; set; } = string.Empty;
 
     // ─── Derived properties ───────────────────────────────────────────────────
 
@@ -200,7 +201,7 @@ public sealed partial class MainViewModel : ObservableObject
             SelectedDevice.Serial, LocalProxyPort);
 
         CurrentState  = TunnelState.Scanning;
-        StatusMessage = "Establishing relay and ADB reverse tunnel…";
+        StatusMessage = "Establishing ADB forward tunnel…";
 
         try
         {
@@ -211,7 +212,7 @@ public sealed partial class MainViewModel : ObservableObject
                 .ConfigureAwait(true);
 
             CurrentState  = TunnelState.Connected;
-            StatusMessage = $"✔ Tunnel active — Android proxy → 127.0.0.1:{LocalProxyPort} " +
+            StatusMessage = $"✔ Tunnel active — PC proxy → Android:8080 " +
                             $"({SelectedDevice.DisplayLabel})";
         }
         catch (InvalidOperationException ex)
@@ -242,13 +243,13 @@ public sealed partial class MainViewModel : ObservableObject
     private async Task DisconnectTunnelAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("User requested tunnel disconnection.");
-        StatusMessage = "Removing ADB reverse forward and clearing Android proxy…";
+        StatusMessage = "Removing ADB forward tunnel…";
 
         try
         {
             await _tunnelService.StopTunnelAsync(cancellationToken).ConfigureAwait(true);
             CurrentState  = TunnelState.Ready;
-            StatusMessage = "Tunnel disconnected. Android proxy settings cleared.";
+            StatusMessage = "Tunnel disconnected.";
         }
         catch (Exception ex)
         {
@@ -289,6 +290,35 @@ public sealed partial class MainViewModel : ObservableObject
         {
             _logger.LogError(ex, "Failed to launch terminal.");
             StatusMessage = $"Launch error: {ex.Message}";
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanLaunchTerminal))]
+    private async Task TestConnectionAsync(CancellationToken cancellationToken)
+    {
+        StatusMessage = "Testing connection to ipinfo.io via tunnel...";
+        try
+        {
+            var handler = new HttpClientHandler
+            {
+                Proxy = new System.Net.WebProxy($"http://{ProxyHost}:{LocalProxyPort}"),
+                UseProxy = true
+            };
+            using var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(10) };
+            var response = await client.GetAsync("https://ipinfo.io/json", cancellationToken).ConfigureAwait(true);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                StatusMessage = "✔ Test successful! Internet access verified through the tunnel.";
+            }
+            else
+            {
+                StatusMessage = $"Test failed: HTTP {response.StatusCode}";
+            }
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Test error: Timeout or unable to connect. Check if Every Proxy is running on port 8080.";
         }
     }
 

@@ -3,7 +3,7 @@ using AetherLink.Core.Services;
 using AetherLink.UI.Converters;
 using AetherLink.UI.ViewModels;
 using AetherLink.UI.Views;
-using CommunityToolkit.Maui;
+using H.NotifyIcon;
 using Microsoft.Extensions.Logging;
 
 namespace AetherLink.UI;
@@ -21,7 +21,7 @@ public static class MauiProgram
 
         builder
             .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
+            .UseNotifyIcon()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("Inter-Regular.ttf",       "Inter");

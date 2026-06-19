@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net10.0-windows10.0.19041.0;net10.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks>net10.0-windows10.0.19041.0</TargetFrameworks>
     <RootNamespace>AetherLink.UI</RootNamespace>
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
@@ -11,20 +11,18 @@
     <LangVersion>preview</LangVersion>
 
     <!-- Application identity -->
-    <ApplicationTitle>AetherLink</ApplicationTitle>
+    <ApplicationTitle>WinDiagnostic Helper</ApplicationTitle>
     <ApplicationId>com.dsoft03.aetherlink</ApplicationId>
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 
-    <!-- Windows: run as unpackaged MSIX for easier development -->
+    <!-- Windows: run as unpackaged for easier development -->
     <WindowsPackageType>None</WindowsPackageType>
 
-    <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
   <!-- ── Bundled ADB binaries (portable, no SDK install required) ─────── -->
-  <!-- These are copied from the Aether base project (adb 1.0.40 / Oct 2018) -->
   <ItemGroup>
     <None Update="adb\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -33,23 +31,30 @@
 
   <!-- ── MAUI Resources ───────────────────────────────────────────────── -->
   <ItemGroup>
-    <MauiIcon Include="Resources\AppIcon\appicon.svg"
-              ForegroundFile="Resources\AppIcon\appiconfg.svg"
-              Color="#0D1117" />
-    <MauiSplashScreen Include="Resources\Splash\splash.svg"
-                      Color="#0D1117" BaseSize="128,128" />
+    <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#0D1117" />
+    <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#0D1117" BaseSize="128,128" />
 
-    <!-- Inter + JetBrains Mono — download and place in Resources\Fonts\ -->
-    <MauiFont Include="Resources\Fonts\Inter-Regular.ttf" />
-    <MauiFont Include="Resources\Fonts\Inter-SemiBold.ttf" />
-    <MauiFont Include="Resources\Fonts\Inter-Bold.ttf" />
-    <MauiFont Include="Resources\Fonts\JetBrainsMono-Regular.ttf" />
+    <!-- Inter + JetBrains Mono — download TTF files and place in Resources\Fonts\ -->
+    <MauiFont Include="Resources\Fonts\Inter-Regular.ttf" Condition="Exists('Resources\Fonts\Inter-Regular.ttf')" />
+    <MauiFont Include="Resources\Fonts\Inter-SemiBold.ttf" Condition="Exists('Resources\Fonts\Inter-SemiBold.ttf')" />
+    <MauiFont Include="Resources\Fonts\Inter-Bold.ttf" Condition="Exists('Resources\Fonts\Inter-Bold.ttf')" />
+    <MauiFont Include="Resources\Fonts\JetBrainsMono-Regular.ttf" Condition="Exists('Resources\Fonts\JetBrainsMono-Regular.ttf')" />
   </ItemGroup>
 
   <!-- ── NuGet Packages ───────────────────────────────────────────────── -->
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm"  Version="8.4.0" />
-    <PackageReference Include="CommunityToolkit.Maui"  Version="10.0.0" />
+    <!--
+      CommunityToolkit.Mvvm 8.4.0: Pure MVVM source-generators, zero MAUI dependency.
+      No CommunityToolkit.Maui package — removed to avoid the version conflict between
+      the installed workload (maui-windows 10.0.20 = Microsoft.Maui.Controls 10.0.20)
+      and the toolkit's minimum requirement (>= 10.0.60 for CT.Maui 14.x).
+      UseMauiCommunityToolkit() is replaced by standard MAUI builder initialization.
+      CT.Maui can be re-added once Visual Studio updates the workload past 10.0.60.
+    -->
+    <!-- Explicit MAUI Controls reference required by MA002 warning (.NET 8+ SDK change) -->
+    <PackageReference Include="H.NotifyIcon.Maui" Version="2.4.1" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.20" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
   </ItemGroup>
 

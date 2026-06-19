@@ -12,4 +12,12 @@ public sealed partial class MainPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
+
+    private void OnHideButtonClicked(object sender, EventArgs e)
+    {
+        if (AetherLink.UI.App.MainWindow != null)
+        {
+            H.NotifyIcon.WindowExtensions.Hide(AetherLink.UI.App.MainWindow);
+        }
+    }
 }
