@@ -9,33 +9,32 @@
     Title="WinDiagnostic Helper"
     BackgroundColor="#0D1117">
 
+    <Grid
+        RowDefinitions="Auto,*,Auto"
+        Padding="24,20,24,20"
+        RowSpacing="0">
 
-    <ScrollView>
+        <!-- ══ HEADER ═══════════════════════════════════════════════ -->
         <Grid
-            RowDefinitions="Auto,*,Auto"
-            Padding="24,20,24,20"
-            RowSpacing="0">
+            Grid.Row="0"
+            ColumnDefinitions="Auto,*,Auto"
+            Margin="0,0,0,16">
 
-            <!-- ══ HEADER ═══════════════════════════════════════════════ -->
-            <Grid
-                Grid.Row="0"
-                ColumnDefinitions="Auto,*,Auto"
-                Margin="0,0,0,16">
+            <VerticalStackLayout Grid.Column="0" Spacing="0">
+                <Label FontFamily="InterBold" FontSize="18" TextColor="{StaticResource TextPrimary}" Text="WinDiagnostic Helper" />
+                <Label FontFamily="Inter" FontSize="11" TextColor="{StaticResource TextSecondary}" Text="Local hardware diagnostics bridge" />
+            </VerticalStackLayout>
 
-                <VerticalStackLayout Grid.Column="0" Spacing="0">
-                    <Label FontFamily="InterBold" FontSize="18" TextColor="{StaticResource TextPrimary}" Text="WinDiagnostic Helper" />
-                    <Label FontFamily="Inter" FontSize="11" TextColor="{StaticResource TextSecondary}" Text="Local hardware diagnostics bridge" />
-                </VerticalStackLayout>
+            <!-- Status indicator -->
+            <HorizontalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center">
+                <Ellipse WidthRequest="8" HeightRequest="8" VerticalOptions="Center" Fill="{Binding StatusIndicatorColor}" />
+                <Label Text="{Binding CurrentState}" FontFamily="Inter" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </Grid>
 
-                <!-- Status indicator -->
-                <HorizontalStackLayout Grid.Column="2" Spacing="6" VerticalOptions="Center">
-                    <Ellipse WidthRequest="8" HeightRequest="8" VerticalOptions="Center" Fill="{Binding StatusIndicatorColor}" />
-                    <Label Text="{Binding CurrentState}" FontFamily="Inter" FontSize="11" TextColor="{StaticResource TextSecondary}" VerticalOptions="Center" />
-                </HorizontalStackLayout>
-            </Grid>
-
-            <!-- ══ CONTENT ══════════════════════════════════════════════ -->
-            <VerticalStackLayout Grid.Row="1" Spacing="4">
+        <!-- ══ CONTENT ══════════════════════════════════════════════ -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="4">
 
                 <!-- ─ CARD 1: Device & Connection ───────────────────────── -->
                 <Border Style="{StaticResource CardFrame}">
@@ -54,6 +53,7 @@
                             BackgroundColor="{StaticResource SurfaceColor}"
                             FontSize="13"
                             HeightRequest="70"
+                            VerticalTextAlignment="Center"
                             ItemsSource="{Binding Devices}"
                             SelectedItem="{Binding SelectedDevice, Mode=TwoWay}"
                             ItemDisplayBinding="{Binding DisplayLabel}"
@@ -101,7 +101,7 @@
                                 Text="Test Connection"
                                 Command="{Binding TestConnectionCommand}"
                                 IsEnabled="{Binding IsConnected}" />
-                            
+
                             <Button
                                 Grid.Column="2"
                                 Style="{StaticResource SecondaryButton}"
@@ -113,17 +113,17 @@
                 </Border>
 
             </VerticalStackLayout>
+        </ScrollView>
 
-            <!-- ══ STATUS BAR ═══════════════════════════════════════════ -->
-            <Label
-                Grid.Row="2"
-                Margin="0,16,0,0"
-                Text="{Binding StatusMessage}"
-                FontFamily="Inter" FontSize="11"
-                TextColor="{StaticResource TextSecondary}"
-                LineBreakMode="TailTruncation"
-                HorizontalOptions="Center" />
+        <!-- ══ STATUS BAR ═══════════════════════════════════════════ -->
+        <Label
+            Grid.Row="2"
+            Margin="0,16,0,0"
+            Text="{Binding StatusMessage}"
+            FontFamily="Inter" FontSize="11"
+            TextColor="{StaticResource TextSecondary}"
+            LineBreakMode="TailTruncation"
+            HorizontalOptions="Center" />
 
-        </Grid>
-    </ScrollView>
+    </Grid>
 </ContentPage>

@@ -1,4 +1,5 @@
 using H.NotifyIcon;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AetherLink.UI;
 
@@ -8,19 +9,20 @@ namespace AetherLink.UI;
 /// </summary>
 public sealed partial class App : Application
 {
-    private readonly AetherLink.UI.Views.MainPage _mainPage;
+    private readonly IServiceProvider _services;
     public static Window? MainWindow { get; private set; }
     private TaskbarIcon? _trayIcon;
 
-    public App(AetherLink.UI.Views.MainPage mainPage)
+    public App(IServiceProvider services)
     {
-        _mainPage = mainPage;
+        _services = services;
         InitializeComponent();
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        MainWindow = new Window(_mainPage)
+        var mainPage = _services.GetRequiredService<AetherLink.UI.Views.MainPage>();
+        MainWindow = new Window(mainPage)
         {
             Title   = "WinDiagnostic Helper",
             MinimumWidth  = 680,
