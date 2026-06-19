@@ -10,7 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <!-- Global converter registration so XAML can resolve {StaticResource InvertBoolConverter} -->
             <converters:InverseBoolConverter x:Key="InvertBoolConverter" />
         </ResourceDictionary>

@@ -52,10 +52,15 @@
       CT.Maui can be re-added once Visual Studio updates the workload past 10.0.60.
     -->
     <!-- Explicit MAUI Controls reference required by MA002 warning (.NET 8+ SDK change) -->
-    <PackageReference Include="H.NotifyIcon.Maui" Version="2.4.1" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.20" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
+  </ItemGroup>
+
+  <!-- ── Windows-only: native tray icon via System.Windows.Forms.NotifyIcon ── -->
+  <!-- FrameworkReference (not UseWindowsForms) avoids pulling in WPF targets   -->
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
   </ItemGroup>
 
   <!-- ── Project References ───────────────────────────────────────────── -->

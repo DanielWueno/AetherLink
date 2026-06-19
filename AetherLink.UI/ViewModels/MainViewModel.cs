@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using AetherLink.Core.Abstractions;
 using AetherLink.Core.Models;
 using Microsoft.Extensions.Logging;
+// Explicit alias — System.Windows.Forms (via FrameworkReference) also pulls in System.Drawing.Color
+using MauiColor = Microsoft.Maui.Graphics.Color;
 
 namespace AetherLink.UI.ViewModels;
 
@@ -70,20 +72,20 @@ public sealed partial class MainViewModel : ObservableObject
         _                     => "⚡  Connect Tunnel"
     };
 
-    public Color ConnectButtonColor => CurrentState switch
+    public MauiColor ConnectButtonColor => CurrentState switch
     {
-        TunnelState.Connected => Color.FromArgb("#E53935"),
-        TunnelState.Error     => Color.FromArgb("#FB8C00"),
-        TunnelState.Scanning  => Color.FromArgb("#546E7A"),
-        _                     => Color.FromArgb("#00BFA5")
+        TunnelState.Connected => MauiColor.FromArgb("#E53935"),
+        TunnelState.Error     => MauiColor.FromArgb("#FB8C00"),
+        TunnelState.Scanning  => MauiColor.FromArgb("#546E7A"),
+        _                     => MauiColor.FromArgb("#00BFA5")
     };
 
-    public Color StatusIndicatorColor => CurrentState switch
+    public MauiColor StatusIndicatorColor => CurrentState switch
     {
-        TunnelState.Connected => Color.FromArgb("#00E676"),
-        TunnelState.Error     => Color.FromArgb("#FF5252"),
-        TunnelState.Scanning  => Color.FromArgb("#FFD740"),
-        _                     => Color.FromArgb("#78909C")
+        TunnelState.Connected => MauiColor.FromArgb("#00E676"),
+        TunnelState.Error     => MauiColor.FromArgb("#FF5252"),
+        TunnelState.Scanning  => MauiColor.FromArgb("#FFD740"),
+        _                     => MauiColor.FromArgb("#78909C")
     };
 
     /// <summary>

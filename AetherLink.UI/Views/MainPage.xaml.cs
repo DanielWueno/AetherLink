@@ -15,9 +15,12 @@ public sealed partial class MainPage : ContentPage
 
     private void OnHideButtonClicked(object sender, EventArgs e)
     {
-        if (AetherLink.UI.App.MainWindow != null)
-        {
-            H.NotifyIcon.WindowExtensions.Hide(AetherLink.UI.App.MainWindow);
-        }
+#if WINDOWS
+        // AppWindow.Hide() hides at the WinUI3/OS level without destroying the window.
+        // CloseWindow() would remove it from MAUI's list → app exits when no windows remain.
+        var nativeWindow = AetherLink.UI.App.MainWindow?.Handler?.PlatformView
+            as Microsoft.UI.Xaml.Window;
+        nativeWindow?.AppWindow.Hide();
+#endif
     }
 }
