@@ -9,60 +9,6 @@
     Title="WinDiagnostic Helper"
     BackgroundColor="#0D1117">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:InvertBoolConverter x:Key="InvertBoolConverter" />
-
-            <!-- ── Color Palette ────────────────────────────────────────── -->
-            <Color x:Key="SurfaceColor">#0D1117</Color>
-            <Color x:Key="SurfaceElevatedColor">#161B22</Color>
-            <Color x:Key="BorderColor">#21262D</Color>
-            <Color x:Key="TextPrimary">#C9D1D9</Color>
-            <Color x:Key="TextSecondary">#8B949E</Color>
-            <Color x:Key="AccentTeal">#3FB950</Color>
-            <Color x:Key="AccentAmber">#D29922</Color>
-
-            <!-- ── Styles ────────────────────────────────────────────────── -->
-            <Style x:Key="CardFrame" TargetType="Border">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="Stroke" Value="{StaticResource BorderColor}" />
-                <Setter Property="StrokeThickness" Value="1" />
-                <Setter Property="StrokeShape" Value="RoundRectangle 8" />
-                <Setter Property="Padding" Value="16" />
-                <Setter Property="Margin" Value="0,6" />
-            </Style>
-
-            <Style x:Key="SectionLabel" TargetType="Label">
-                <Setter Property="FontFamily" Value="InterSemiBold" />
-                <Setter Property="FontSize" Value="11" />
-                <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
-                <Setter Property="TextTransform" Value="Uppercase" />
-            </Style>
-
-            <Style x:Key="PrimaryButton" TargetType="Button">
-                <Setter Property="FontFamily" Value="InterSemiBold" />
-                <Setter Property="FontSize" Value="13" />
-                <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
-                <Setter Property="BackgroundColor" Value="{StaticResource SurfaceElevatedColor}" />
-                <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
-                <Setter Property="BorderWidth" Value="1" />
-                <Setter Property="CornerRadius" Value="6" />
-                <Setter Property="HeightRequest" Value="40" />
-            </Style>
-
-            <Style x:Key="SecondaryButton" TargetType="Button">
-                <Setter Property="FontFamily" Value="Inter" />
-                <Setter Property="FontSize" Value="12" />
-                <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
-                <Setter Property="BorderWidth" Value="1" />
-                <Setter Property="CornerRadius" Value="6" />
-                <Setter Property="HeightRequest" Value="36" />
-            </Style>
-
-        </ResourceDictionary>
-    </ContentPage.Resources>
 
     <ScrollView>
         <Grid
@@ -105,9 +51,9 @@
                             Title="Select a connected Android device"
                             TitleColor="{StaticResource TextSecondary}"
                             TextColor="{StaticResource TextPrimary}"
-                            BackgroundColor="Transparent"
+                            BackgroundColor="{StaticResource SurfaceColor}"
                             FontSize="13"
-                            HeightRequest="40"
+                            HeightRequest="70"
                             ItemsSource="{Binding Devices}"
                             SelectedItem="{Binding SelectedDevice, Mode=TwoWay}"
                             ItemDisplayBinding="{Binding DisplayLabel}"

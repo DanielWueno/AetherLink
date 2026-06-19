@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- ── Color Palette: Obsidian Tech ────────────────────────── -->
+    <Color x:Key="SurfaceColor">#070A0E</Color>
+    <Color x:Key="SurfaceElevatedColor">#121720</Color>
+    <Color x:Key="BorderColor">#1F2633</Color>
+    <Color x:Key="TextPrimary">#E6EDF3</Color>
+    <Color x:Key="TextSecondary">#91A1B4</Color>
+    <Color x:Key="AccentTeal">#00E5FF</Color>
+    <Color x:Key="AccentAmber">#FFB300</Color>
+
+    <!-- ── Styles ────────────────────────────────────────────────── -->
+    <Style x:Key="CardFrame" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="Stroke" Value="{StaticResource BorderColor}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 8" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="Margin" Value="0,6" />
+    </Style>
+
+    <Style x:Key="SectionLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="InterSemiBold" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="TextTransform" Value="Uppercase" />
+    </Style>
+
+    <Style x:Key="PrimaryButton" TargetType="Button">
+        <Setter Property="FontFamily" Value="InterSemiBold" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceElevatedColor}" />
+        <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="HeightRequest" Value="40" />
+    </Style>
+
+    <Style x:Key="SecondaryButton" TargetType="Button">
+        <Setter Property="FontFamily" Value="Inter" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="HeightRequest" Value="36" />
+    </Style>
+
+</ResourceDictionary>
