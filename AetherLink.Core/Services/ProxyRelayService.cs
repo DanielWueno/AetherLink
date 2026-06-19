@@ -203,7 +203,7 @@ public sealed class ProxyRelayService(ILogger<ProxyRelayService> logger)
         // Priority 1 — Windows system proxy (IE / WinInet / Group Policy).
         IWebProxy systemProxy = WebRequest.GetSystemWebProxy();
         Uri targetUri = new($"{(isHttps ? "https" : "http")}://{targetHost}:{targetPort}");
-        Uri proxyUri  = systemProxy.GetProxy(targetUri);
+        Uri? proxyUri = systemProxy.GetProxy(targetUri);
         if (proxyUri is not null && proxyUri != targetUri)
             return proxyUri;
 

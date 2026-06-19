@@ -19,7 +19,6 @@ namespace AetherLink.Core.Services;
 /// </list>
 /// </summary>
 public sealed class AdbTunnelService(
-    IAndroidDeviceService deviceService,
     IProxyRelayService    proxyRelay,
     ILogger<AdbTunnelService> logger)
     : IAdbTunnelService, IDisposable
@@ -71,39 +70,23 @@ public sealed class AdbTunnelService(
                 "Starting tunnel — device: {Model} ({Serial}), proxy port: {Port}",
                 _activeDevice.Model, _activeDevice.Serial, localProxyPort);
 
-            // 2. Start the local proxy relay (binds to 127.0.0.1:<port>).
             _activeProxyPort = localProxyPort;
-            proxyRelay.Start(localProxyPort);
 
-            // 3. Remove any stale reverse forwards, then create a fresh one.
-            //    ADB reverse: device:localProxyPort → host:localProxyPort
+            // 2. Remove any stale forwards, then create a fresh one.
+            //    ADB forward: host:localProxyPort → device:8080 (Every Proxy)
             await Task.Run(() =>
             {
-                _adbClient.RemoveAllReverseForwards(_activeDevice);
-                _adbClient.CreateReverseForward(
+                _adbClient.RemoveAllForwards(_activeDevice);
+                _adbClient.CreateForward(
                     _activeDevice,
                     $"tcp:{localProxyPort}",
-                    $"tcp:{localProxyPort}",
+                    $"tcp:8080",
                     allowRebind: true);
             }, cancellationToken).ConfigureAwait(false);
 
-            logger.LogInformation("ADB reverse forward created: device:tcp:{Port} → host:tcp:{Port}", localProxyPort);
+            logger.LogInformation("ADB forward created: host:tcp:{Port1} → device:tcp:8080", localProxyPort);
 
-            // 4. Inject Android system proxy so ALL device traffic enters the relay.
-            await Task.Run(() =>
-            {
-                _adbClient.ExecuteRemoteCommand(
-                    $"settings put global http_proxy 127.0.0.1:{localProxyPort}",
-                    _activeDevice, null);
-                _adbClient.ExecuteRemoteCommand(
-                    $"settings put global global_http_proxy_host 127.0.0.1",
-                    _activeDevice, null);
-                _adbClient.ExecuteRemoteCommand(
-                    $"settings put global global_http_proxy_port {localProxyPort}",
-                    _activeDevice, null);
-            }, cancellationToken).ConfigureAwait(false);
-
-            logger.LogInformation("[AetherLink] Stealth tunnel active. Android proxy → 127.0.0.1:{Port}", localProxyPort);
+            logger.LogInformation("[AetherLink] Stealth tunnel active. PC proxy → Android:8080");
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
@@ -145,27 +128,22 @@ public sealed class AdbTunnelService(
     {
         if (_activeDevice is null) return;
 
-        // 1. Clear Android system proxy first (best-effort; device may be disconnected).
+        // 1. Remove forward
         try
         {
             await Task.Run(() =>
             {
-                _adbClient.ExecuteRemoteCommand("settings put global http_proxy :0",
-                    _activeDevice, null);
-                _adbClient.RemoveAllReverseForwards(_activeDevice);
+                _adbClient.RemoveAllForwards(_activeDevice);
             }, cancellationToken).ConfigureAwait(false);
 
-            logger.LogInformation("Android proxy settings cleared for {Serial}.", _activeDevice.Serial);
+            logger.LogInformation("ADB forward removed for {Serial}.", _activeDevice.Serial);
         }
         catch (Exception ex)
         {
             logger.LogWarning(ex,
-                "Could not clear Android proxy for {Serial} — device may have been disconnected.",
+                "Could not remove forward for {Serial} — device may have been disconnected.",
                 _activeDevice.Serial);
         }
-
-        // 2. Stop the local relay regardless of ADB errors.
-        proxyRelay.Stop();
 
         _activeDevice    = null;
         _activeProxyPort = 0;
@@ -180,15 +158,11 @@ public sealed class AdbTunnelService(
         // StopTunnelAsync is already guarded against double-calls.
         if (IsForwardActive)
         {
-            proxyRelay.Stop();
-
             try
             {
                 if (_activeDevice is not null)
                 {
-                    _adbClient.ExecuteRemoteCommand("settings put global http_proxy :0",
-                        _activeDevice, null);
-                    _adbClient.RemoveAllReverseForwards(_activeDevice);
+                    _adbClient.RemoveAllForwards(_activeDevice);
                 }
             }
             catch { /* Swallow during GC-driven disposal */ }

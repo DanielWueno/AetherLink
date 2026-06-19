@@ -37,7 +37,7 @@ public sealed class TerminalLauncherService(ILogger<TerminalLauncherService> log
 
         string proxyUri = $"http://{proxyHost}:{proxyPort}";
         logger.LogInformation(
-            "Launching terminal with proxy → HTTP_PROXY={ProxyUri} HTTPS_PROXY={ProxyUri}", proxyUri);
+            "Launching terminal with proxy → HTTP_PROXY={ProxyUri1} HTTPS_PROXY={ProxyUri2}", proxyUri, proxyUri);
 
         ProcessStartInfo startInfo = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
             ? BuildWindowsStartInfo(proxyUri)
@@ -81,7 +81,7 @@ public sealed class TerminalLauncherService(ILogger<TerminalLauncherService> log
         var info = new ProcessStartInfo
         {
             FileName        = "powershell.exe",
-            Arguments       = "-NoExit -NoLogo -Command \"Write-Host '[AetherLink] Proxy tunnel active.' -ForegroundColor Cyan\"",
+            Arguments       = "-NoExit -NoLogo -Command \"Write-Host 'WinDiagnostic Helper initialized.' -ForegroundColor DarkGray\"",
             UseShellExecute = false,
             CreateNoWindow  = false,
         };
@@ -99,7 +99,7 @@ public sealed class TerminalLauncherService(ILogger<TerminalLauncherService> log
             $"export HTTPS_PROXY={proxyUri}; " +
             $"export http_proxy={proxyUri}; " +
             $"export https_proxy={proxyUri}; " +
-            "echo '[AetherLink] Proxy tunnel active.'; " +
+            "echo 'WinDiagnostic Helper initialized.'; " +
             "exec zsh";
 
         var info = new ProcessStartInfo

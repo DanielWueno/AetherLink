@@ -22,27 +22,53 @@ public sealed class AndroidDeviceService(ILogger<AndroidDeviceService> logger) :
     {
         try
         {
+            // 1. Check if ADB is already running and responding on port 5037
+            try
+            {
+                var status = _adbClient.GetAdbVersion();
+                logger.LogInformation("ADB Server already running (Version {Version}).", status);
+                return;
+            }
+            catch
+            {
+                logger.LogInformation("ADB server not responding on port 5037. Attempting to start it.");
+            }
+
             string adbPath = ResolveAdbPath();
-            logger.LogInformation("Ensuring ADB server is running. Binary: {Path}", adbPath);
+            logger.LogInformation("Starting ADB server. Binary: {Path}", adbPath);
 
-            var server = new AdbServer();
-            var result = await Task.Run(
-                () => server.StartServer(adbPath, restartServerIfNewer: false),
-                cancellationToken).ConfigureAwait(false);
+            var info = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = adbPath,
+                Arguments = "start-server",
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
 
-            logger.LogInformation("ADB server status: {Status}", result);
+            using var process = System.Diagnostics.Process.Start(info);
+            if (process == null) throw new InvalidOperationException("Failed to start adb process.");
+
+            // Wait with a strict timeout to prevent zombie processes
+            var timeoutTask = Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
+            var exitTask = process.WaitForExitAsync(cancellationToken);
+
+            if (await Task.WhenAny(exitTask, timeoutTask) == timeoutTask)
+            {
+                logger.LogWarning("ADB start-server timed out. Killing process to prevent zombie accumulation.");
+                process.Kill(entireProcessTree: true);
+                throw new TimeoutException("ADB server failed to start within 5 seconds.");
+            }
+
+            logger.LogInformation("ADB server started successfully.");
         }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             logger.LogError(ex, "Failed to start ADB server. Check that the ADB binary exists.");
             throw new InvalidOperationException(
                 "Could not start the ADB server. " +
-                "Ensure the 'adb' folder with adb.exe is in the application directory, " +
-                "or Android Platform Tools are installed on PATH.", ex);
+                "Ensure the 'adb' folder with adb.exe is in the application directory.", ex);
         }
     }
 
